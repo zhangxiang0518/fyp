@@ -1,2 +1,2 @@
-# fyp
-backend for fyp
+# fyp project
+backend for fyp - springboot
