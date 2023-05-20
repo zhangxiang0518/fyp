@@ -3,8 +3,6 @@ package com.fyp.cm.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
