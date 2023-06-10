@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fyp.cm.model.Device;
+import com.fyp.cm.response.CustomResponse;
 import com.fyp.cm.service.DeviceService;
 
 @RestController
@@ -23,45 +24,59 @@ public class DeviceController {
     @Autowired
     private DeviceService deviceService;
 
-    @GetMapping
-    public ResponseEntity<List<Device>> getAllDevices() {
-        List<Device> houses = deviceService.getAllDevices();
-        return ResponseEntity.ok(houses); // return 200 OK with the list of houses
+   @GetMapping
+    public ResponseEntity<CustomResponse<List<Device>>> getAllDevices() {
+        List<Device> devices = deviceService.getAllDevices();
+        CustomResponse<List<Device>> response = new CustomResponse<>(HttpStatus.OK.value(), "Devices retrieved successfully", devices);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Device> getDeviceById(@PathVariable String id) {
+    public ResponseEntity<CustomResponse<Device>> getDeviceById(@PathVariable String id) {
         Device device = deviceService.getDeviceById(id);
+        CustomResponse<Device> response;
+        
         if (device != null) {
-            return ResponseEntity.ok(device); // return 200 OK with the device
+            response = new CustomResponse<>(HttpStatus.OK.value(), "Device retrieved successfully", device);
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.notFound().build(); // return 404 Not Found if device not found
+            response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(), "Device not found", null);
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     @PostMapping
-    public ResponseEntity<Device> addDevice(@RequestBody Device device) {
+    public ResponseEntity<CustomResponse<Device>> addDevice(@RequestBody Device device) {
         Device savedDevice = deviceService.addDevice(device);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedDevice);
+        CustomResponse<Device> response = new CustomResponse<>(HttpStatus.CREATED.value(), "Device added successfully", savedDevice);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Device> updateDevice(@PathVariable String id, @RequestBody Device device) {
+    public ResponseEntity<CustomResponse<Device>> updateDevice(@PathVariable String id, @RequestBody Device device) {
         Device updatedDevice = deviceService.updateDevice(id, device);
+        CustomResponse<Device> response;
+        
         if (updatedDevice != null) {
-            return ResponseEntity.ok(updatedDevice);
+            response = new CustomResponse<>(HttpStatus.OK.value(), "Device updated successfully", updatedDevice);
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.notFound().build();
+            response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(), "Device not found", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDevice(@PathVariable String id) {
+    public ResponseEntity<CustomResponse<String>> deleteDevice(@PathVariable String id) {
         Boolean deleted = deviceService.deleteDevice(id);
+        CustomResponse<String> response;
+        
         if (deleted) {
-            return ResponseEntity.ok(id+" deleted successful");
+            response = new CustomResponse<>(HttpStatus.OK.value(), "Device deleted successfully", id + " deleted successfully");
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.notFound().build();
+            response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(), "Device not found", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }

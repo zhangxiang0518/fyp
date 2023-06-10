@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fyp.cm.model.User;
+import com.fyp.cm.response.CustomResponse;
 import com.fyp.cm.service.UserService;
 
 @RestController
@@ -24,42 +25,53 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<CustomResponse<List<User>>> getAllUsers() {
         List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        CustomResponse<List<User>> response = new CustomResponse<>(HttpStatus.OK.value(), "Success", users);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id) {
+    public ResponseEntity<CustomResponse<User>> getUserById(@PathVariable String id) {
         User user = userService.getUserById(id);
         if (user != null) {
-            return ResponseEntity.ok(user);
+            CustomResponse<User> response = new CustomResponse<>(HttpStatus.OK.value(), "Success", user);
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.notFound().build();
+            CustomResponse<User> response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(), "User not found", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    public ResponseEntity<CustomResponse<User>> addUser(@RequestBody User user) {
         User savedUser = userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        CustomResponse<User> response = new CustomResponse<>(HttpStatus.CREATED.value(), "User added", savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
+    public ResponseEntity<CustomResponse<User>> updateUser(@PathVariable String id, @RequestBody User user) {
         User updatedUser = userService.updateUser(id, user);
         if (updatedUser != null) {
-            return ResponseEntity.ok(updatedUser);
+            CustomResponse<User> response = new CustomResponse<>(HttpStatus.OK.value(), "User updated", updatedUser);
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.notFound().build();
+            CustomResponse<User> response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(), "User not found", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable String id) {
+    public ResponseEntity<CustomResponse<String>> deleteUser(@PathVariable String id) {
         boolean deleted = userService.deleteUser(id);
         if (deleted) {
-            return ResponseEntity.ok(id+" deleted successful");
+            CustomResponse<String> response = new CustomResponse<>(HttpStatus.OK.value(), "User deleted", id);
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.notFound().build();
+            CustomResponse<String> response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(), "User not found",
+                    null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }

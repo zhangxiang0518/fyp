@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fyp.cm.model.Parameter;
+import com.fyp.cm.response.CustomResponse;
 import com.fyp.cm.service.ParameterService;
 
 @RestController
@@ -24,44 +25,58 @@ public class ParameterController {
     private ParameterService parameterService;
 
     @GetMapping
-    public ResponseEntity<List<Parameter>> getAllParameters() {
+    public ResponseEntity<CustomResponse<List<Parameter>>> getAllParameters() {
         List<Parameter> parameters = parameterService.getAllParameters();
-        return ResponseEntity.ok(parameters); // return 200 OK with the list of parameters
+        CustomResponse<List<Parameter>> response = new CustomResponse<>(HttpStatus.OK.value(), "Success", parameters);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<Parameter> addParameter(@RequestBody Parameter parameter) {
+    public ResponseEntity<CustomResponse<Parameter>> addParameter(@RequestBody Parameter parameter) {
         Parameter savedParameter = parameterService.addParameter(parameter);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedParameter);
+        CustomResponse<Parameter> response = new CustomResponse<>(HttpStatus.CREATED.value(), "Parameter added",
+                savedParameter);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Parameter> getParameterById(@PathVariable String id) {
+    public ResponseEntity<CustomResponse<Parameter>> getParameterById(@PathVariable String id) {
         Parameter parameter = parameterService.getParameterById(id);
         if (parameter != null) {
-            return ResponseEntity.ok(parameter);
+            CustomResponse<Parameter> response = new CustomResponse<>(HttpStatus.OK.value(), "Success", parameter);
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.notFound().build();
+            CustomResponse<Parameter> response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(),
+                    "Parameter not found", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Parameter> updateParameter(@PathVariable String id, @RequestBody Parameter parameter) {
+    public ResponseEntity<CustomResponse<Parameter>> updateParameter(@PathVariable String id,
+            @RequestBody Parameter parameter) {
         Parameter updatedParameter = parameterService.updateParameter(id, parameter);
         if (updatedParameter != null) {
-            return ResponseEntity.ok(updatedParameter);
+            CustomResponse<Parameter> response = new CustomResponse<>(HttpStatus.OK.value(), "Parameter updated",
+                    updatedParameter);
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.notFound().build();
+            CustomResponse<Parameter> response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(),
+                    "Parameter not found", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteParameter(@PathVariable String id) {
+    public ResponseEntity<CustomResponse<String>> deleteParameter(@PathVariable String id) {
         boolean deleted = parameterService.deleteParameter(id);
         if (deleted) {
-            return ResponseEntity.ok(id+" deleted successful");
+            CustomResponse<String> response = new CustomResponse<>(HttpStatus.OK.value(), "Parameter deleted", id);
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.notFound().build();
+            CustomResponse<String> response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(), "Parameter not found",
+                    null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fyp.cm.dto.HouseDto;
 import com.fyp.cm.model.House;
+import com.fyp.cm.response.CustomResponse;
 import com.fyp.cm.service.HouseService;
 
 // A controller class for the House entity
@@ -23,51 +24,70 @@ import com.fyp.cm.service.HouseService;
 @RequestMapping("/house")
 public class HouseController {
 
-    // Autowire the HouseService to handle the business logic
-    @Autowired
-    private HouseService houseService;
-  
-    // Get all houses
-    @GetMapping
-    public ResponseEntity<List<House>> getAllHouses() {
-      List<House> houses = houseService.getAllHouses();
-      
-      return ResponseEntity.ok(houses); // return 200 OK with the list of houses
-    }
+  // Autowire the HouseService to handle the business logic
+  @Autowired
+  private HouseService houseService;
 
-    // Get a house by id
-    @GetMapping("/{id}")
-    public ResponseEntity<House> getHouseById(@PathVariable String id) {
-      House house = houseService.getHouseById(id);
-      return ResponseEntity.ok(house); // return 200 OK with the house
-    }
-  
-    // Create a new house
-    @PostMapping
-    public ResponseEntity<House> createHouse(@RequestBody HouseDto houseDto) {
-      House createdHouse = houseService.createHouse(houseDto);
-      return ResponseEntity.status(HttpStatus.CREATED).body(createdHouse); // return 201 CREATED with the created house
-    }
-  
-    // Update a house by id
-    @PutMapping("/{id}")
-    public ResponseEntity<House> updateHouse(@PathVariable String id, @RequestBody HouseDto houseDto) {
-        House updatedHouse = houseService.updateHouse(id, houseDto);
-        if (updatedHouse != null) {
-            return ResponseEntity.ok(updatedHouse);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+  // Get all houses
+  @GetMapping
+  public ResponseEntity<CustomResponse<List<House>>> getAllHouses() {
+    List<House> houses = houseService.getAllHouses();
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteHouse(@PathVariable String id) {
-        boolean deleted = houseService.deleteHouse(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    CustomResponse<List<House>> response = new CustomResponse<>(HttpStatus.OK.value(), "Houses retrieved successfully",
+        houses);
+    return ResponseEntity.ok(response);
+  }
+
+  // Get a house by id
+  @GetMapping("/{id}")
+  public ResponseEntity<CustomResponse<House>> getHouseById(@PathVariable String id) {
+    House house = houseService.getHouseById(id);
+
+    if (house != null) {
+      CustomResponse<House> response = new CustomResponse<>(HttpStatus.OK.value(), "House retrieved successfully",
+          house);
+      return ResponseEntity.ok(response);
+    } else {
+      CustomResponse<House> response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(), "House not found", null);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
   }
-  
+
+  // Create a new house
+  @PostMapping
+  public ResponseEntity<CustomResponse<House>> createHouse(@RequestBody HouseDto houseDto) {
+    House createdHouse = houseService.createHouse(houseDto);
+
+    CustomResponse<House> response = new CustomResponse<>(HttpStatus.CREATED.value(), "House created successfully",
+        createdHouse);
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+  }
+
+  // Update a house by id
+  @PutMapping("/{id}")
+  public ResponseEntity<CustomResponse<House>> updateHouse(@PathVariable String id, @RequestBody HouseDto houseDto) {
+    House updatedHouse = houseService.updateHouse(id, houseDto);
+
+    if (updatedHouse != null) {
+      CustomResponse<House> response = new CustomResponse<>(HttpStatus.OK.value(), "House updated successfully",
+          updatedHouse);
+      return ResponseEntity.ok(response);
+    } else {
+      CustomResponse<House> response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(), "House not found", null);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<CustomResponse<Void>> deleteHouse(@PathVariable String id) {
+    boolean deleted = houseService.deleteHouse(id);
+
+    if (deleted) {
+      CustomResponse<Void> response = new CustomResponse<>(HttpStatus.OK.value(), "House deleted successfully", null);
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+    } else {
+      CustomResponse<Void> response = new CustomResponse<>(HttpStatus.NOT_FOUND.value(), "House not found", null);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+  }
+}
