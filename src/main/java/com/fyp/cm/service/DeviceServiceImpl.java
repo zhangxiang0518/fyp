@@ -22,6 +22,7 @@ public class DeviceServiceImpl implements DeviceService{
         Device newDevice = Device.builder()
             .serialNum(device.getSerialNum())
             .type(device.getType())
+            .isInstalled(device.getIsInstalled())
             .state(device.getState())
             .build();
         return deviceRepo.save(newDevice);
@@ -33,6 +34,9 @@ public class DeviceServiceImpl implements DeviceService{
         }
         if (deviceDto.getType() == null || deviceDto.getType().isEmpty()) {
             throw new IllegalArgumentException("Type cannot be null or empty");
+        }
+        if (deviceDto.getIsInstalled() == null) {
+            throw new IllegalArgumentException("IsInstalled cannot be null");
         }
         if (deviceDto.getState() == null || deviceDto.getState().isEmpty()) {
             throw new IllegalArgumentException("State cannot be null or empty");

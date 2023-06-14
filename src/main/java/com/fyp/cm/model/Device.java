@@ -14,5 +14,6 @@ public class Device extends BaseEntity{
 
     private String serialNum;
     private String type;
+    private Boolean isInstalled;
     private String state;
 }

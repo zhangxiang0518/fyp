@@ -75,6 +75,7 @@ public class HouseServiceImpl implements HouseService{
              System.out.println(optionalDevice);
              optionalDevice.ifPresent(existingDevice -> {
                  existingDevice.setState(device.getState());
+                 existingDevice.setIsInstalled(device.getIsInstalled());
                  deviceRepo.save(existingDevice);
                  devices.add(existingDevice);
              });
