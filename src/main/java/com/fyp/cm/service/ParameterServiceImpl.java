@@ -60,4 +60,17 @@ public class ParameterServiceImpl implements ParameterService {
             throw new IllegalArgumentException("Parameter Unit cannot be null or empty");
         }
     }
+    public String[] getAllParameterName() {
+        List<Parameter> parameters = parameterRepo.findAll();
+
+        // Create an array to store the parameter names
+        String[] parameterNames = new String[parameters.size()];
+
+        // Extract the names from the parameters and populate the array
+        for (int i = 0; i < parameters.size(); i++) {
+            parameterNames[i] = parameters.get(i).getName();
+        }
+
+        return parameterNames;
+    }
 }

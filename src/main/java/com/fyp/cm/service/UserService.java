@@ -10,4 +10,5 @@ public interface UserService {
     User updateUser(String id, User device);
     boolean deleteUser(String id);
     User getUserById(String id);
+    List<User> findAllUnActiveUsers();
 }

@@ -13,4 +13,5 @@ public interface DeviceService {
     Device updateDevice(String id, Device device);
     boolean deleteDevice(String id);
     Device getDeviceById(String id);
+    List<Device> findAllByIsInstalled();
 }

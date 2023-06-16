@@ -31,6 +31,13 @@ public class DeviceController {
         return ResponseEntity.ok(response);
     }
 
+   @GetMapping("/uninstalled")
+    public ResponseEntity<CustomResponse<List<Device>>> getAllUnInstalledDevices() {
+        List<Device> devices = deviceService.findAllByIsInstalled();
+        CustomResponse<List<Device>> response = new CustomResponse<>(HttpStatus.OK.value(), "Devices retrieved successfully", devices);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CustomResponse<Device>> getDeviceById(@PathVariable String id) {
         Device device = deviceService.getDeviceById(id);

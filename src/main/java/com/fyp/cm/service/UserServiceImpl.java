@@ -55,4 +55,7 @@ public class UserServiceImpl implements UserService {
         return userRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
+    public List<User> findAllUnActiveUsers() {
+        return userRepo.findAllByIsActiveAndIsAdmin(false, false);
+    }
 }

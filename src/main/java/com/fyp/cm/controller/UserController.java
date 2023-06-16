@@ -31,6 +31,14 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/unactive")
+    public ResponseEntity<CustomResponse<List<User>>> findAllUnActiveUsers() {
+        List<User> users = userService.findAllUnActiveUsers();
+        CustomResponse<List<User>> response = new CustomResponse<>(HttpStatus.OK.value(),
+                "Success", users);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CustomResponse<User>> getUserById(@PathVariable String id) {
         User user = userService.getUserById(id);

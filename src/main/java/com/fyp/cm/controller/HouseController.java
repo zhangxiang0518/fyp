@@ -90,4 +90,19 @@ public class HouseController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
   }
+
+  @PutMapping("/{houseId}/admin/{userId}")
+  public ResponseEntity<CustomResponse<String>> changeAdmin(@PathVariable("houseId") String houseId,
+      @PathVariable("userId") String userId) {
+    try {
+      houseService.changeAdmin(houseId, userId);
+
+      CustomResponse<String> customResponse = new CustomResponse<>(200, "Success", "Admin changed successfully");
+      return ResponseEntity.ok(customResponse);
+    } catch (Exception e) {
+      CustomResponse<String> customResponse = new CustomResponse<>(500, "Error", e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(customResponse);
+    }
+  }
+
 }

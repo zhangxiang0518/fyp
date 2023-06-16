@@ -13,4 +13,5 @@ public interface HouseService {
     House createHouse(HouseDto houseDto);
     House updateHouse(String id, HouseDto houseDto);
     Boolean deleteHouse(String id);
+    void changeAdmin(String houseId, String userId);
 }

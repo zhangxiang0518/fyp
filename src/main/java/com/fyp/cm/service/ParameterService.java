@@ -17,4 +17,6 @@ public interface ParameterService {
     Parameter updateParameter(String id, Parameter parameter);
 
     boolean deleteParameter(String id);
+
+    String[] getAllParameterName();
 }

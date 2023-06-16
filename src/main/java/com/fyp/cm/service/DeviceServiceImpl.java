@@ -16,6 +16,9 @@ public class DeviceServiceImpl implements DeviceService{
     public List<Device> getAllDevices() {
         return deviceRepo.findAll();
     }
+    public List<Device> findAllByIsInstalled() {
+        return deviceRepo.findAllByIsInstalled(false);
+    }
     public Device addDevice(Device device) {
         // Validate the device properties
         validateDevice(device);
@@ -67,4 +70,5 @@ public class DeviceServiceImpl implements DeviceService{
     public Device getDeviceById(String id) {
         return deviceRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Device not found with id: " + id));
     }
+
 }

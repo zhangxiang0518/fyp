@@ -3,6 +3,8 @@ package com.fyp.cm.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fyp.cm.dto.HouseDto;
@@ -106,7 +108,7 @@ public class HouseServiceImpl implements HouseService{
                 Optional<User> optionalUser = userRepo.findById(user.getId());
                 optionalUser.ifPresent(existingUser -> {
                     existingUser.setAdmin(user.isAdmin());
-                    existingUser.setActive(user.isActive());
+                    existingUser.setActive(true);
                     existingUser.setCreatedDate(user.getCreatedDate());
                     userRepo.save(existingUser);
                     updatedUsers.add(existingUser);
@@ -120,7 +122,7 @@ public class HouseServiceImpl implements HouseService{
                 Optional<Device> optionalDevice = deviceRepo.findById(device.getId());
                 optionalDevice.ifPresent(existingDevice -> {
                     existingDevice.setState(device.getState());
-                    existingDevice.setIsInstalled(device.getIsInstalled());
+                    existingDevice.setIsInstalled(true);
                     existingDevice.setCreatedDate(device.getCreatedDate());
                     deviceRepo.save(existingDevice);
                     updatedDevices.add(existingDevice);
@@ -165,5 +167,24 @@ public class HouseServiceImpl implements HouseService{
         if (house.getUsers() == null || house.getUsers().isEmpty()) {
             throw new InvalidInputException("Users cannot be null or empty");
         }
+    }
+
+    public void changeAdmin(String houseId, String userId) {
+        House existingHouse = houseRepo.findById(houseId)
+                .orElseThrow(() -> new ResourceNotFoundException("House not found with id: " + houseId));
+
+        List<User> updatedUsers = existingHouse.getUsers().stream()
+                .map(user -> {
+                    if (user.isAdmin()) {
+                        user.setAdmin(false);
+                    } else if (user.getId().equals(userId)) {
+                        user.setAdmin(true);
+                    }
+                    return user;
+                })
+                .collect(Collectors.toList());
+
+        existingHouse.setUsers(updatedUsers);
+        houseRepo.save(existingHouse);
     }
 }

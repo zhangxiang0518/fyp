@@ -31,6 +31,13 @@ public class ParameterController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/names")
+    public ResponseEntity<CustomResponse<String[]>> getAllParameterNames() {
+        String[] parameterNames = parameterService.getAllParameterName();
+        CustomResponse<String[]> response = new CustomResponse<>(HttpStatus.OK.value(), "Success", parameterNames);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping
     public ResponseEntity<CustomResponse<Parameter>> addParameter(@RequestBody Parameter parameter) {
         Parameter savedParameter = parameterService.addParameter(parameter);
