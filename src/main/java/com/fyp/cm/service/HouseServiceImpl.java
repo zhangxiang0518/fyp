@@ -63,7 +63,7 @@ public class HouseServiceImpl implements HouseService{
                 //  existingUser.setEmail(user.getEmail());
                 //  existingUser.setUsername(user.getUsername());
                  existingUser.setAdmin(user.isAdmin());
-                 existingUser.setActive(user.isActive());
+                 existingUser.setActive(true);
                  userRepo.save(existingUser);
                  users.add(existingUser);
              });
@@ -77,7 +77,6 @@ public class HouseServiceImpl implements HouseService{
              System.out.println(optionalDevice);
              optionalDevice.ifPresent(existingDevice -> {
                  existingDevice.setState(device.getState());
-                 existingDevice.setCreatedDate(device.getCreatedDate());
                  existingDevice.setIsInstalled(device.getIsInstalled());
                  deviceRepo.save(existingDevice);
                  devices.add(existingDevice);
@@ -108,8 +107,7 @@ public class HouseServiceImpl implements HouseService{
                 Optional<User> optionalUser = userRepo.findById(user.getId());
                 optionalUser.ifPresent(existingUser -> {
                     existingUser.setAdmin(user.isAdmin());
-                    existingUser.setActive(true);
-                    existingUser.setCreatedDate(user.getCreatedDate());
+                    existingUser.setActive(user.isActive());
                     userRepo.save(existingUser);
                     updatedUsers.add(existingUser);
                 });
@@ -123,7 +121,6 @@ public class HouseServiceImpl implements HouseService{
                 optionalDevice.ifPresent(existingDevice -> {
                     existingDevice.setState(device.getState());
                     existingDevice.setIsInstalled(true);
-                    existingDevice.setCreatedDate(device.getCreatedDate());
                     deviceRepo.save(existingDevice);
                     updatedDevices.add(existingDevice);
                 });
