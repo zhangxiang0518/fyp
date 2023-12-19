@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.mongodb.core.mapping.Document;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class House extends BaseEntity{
     // @DBRef(lazy = false)
     // @NotEmpty(message = "Device list must not be empty")
     private List<Device> devices = new ArrayList<>();
-    // @DBRef(lazy = false)
+    @JsonBackReference
     private List<User> users = new ArrayList<>();
     private Map<String, Boolean> houseParameters;
 }

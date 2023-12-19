@@ -4,6 +4,7 @@ package com.fyp.cm.model;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
@@ -24,5 +25,6 @@ public class User extends BaseEntity{
     @JsonProperty("isActive")
     private boolean isActive;
     @DBRef
+    @JsonManagedReference
     private House house;
 }
