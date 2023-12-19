@@ -64,7 +64,7 @@ public class HouseServiceImpl implements HouseService{
                 //  existingUser.setUsername(user.getUsername());
                  existingUser.setAdmin(user.isAdmin());
                  existingUser.setActive(true);
-                 existingUser.setHouse(newHouse);
+                 existingUser.setHouseId(newHouse.getId());
                  userRepo.save(existingUser);
                  users.add(existingUser);
              });

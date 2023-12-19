@@ -4,6 +4,7 @@ package com.fyp.cm.model;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,7 +25,5 @@ public class User extends BaseEntity{
     private boolean isAdmin;
     @JsonProperty("isActive")
     private boolean isActive;
-    @DBRef
-    @JsonManagedReference
-    private House house;
+    private String houseId;
 }
