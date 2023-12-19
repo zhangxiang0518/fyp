@@ -98,8 +98,15 @@ public class HouseServiceImpl implements HouseService{
             
             // Update house parameters
             HouseParameter houseParameter = houseParameterRepo.findByHouse(existingHouse);
-            houseParameter.setHouseParameterList(houseDto.getHouseParameters());
-            houseParameterRepo.save(houseParameter);
+            if (houseParameter != null) {
+                houseParameter.setHouseParameterList(houseDto.getHouseParameters());
+                houseParameterRepo.save(houseParameter);
+            }else{
+                houseParameter = new HouseParameter();
+                houseParameter.setHouse(existingHouse);
+                houseParameter.setHouseParameterList(houseDto.getHouseParameters());
+                houseParameterRepo.save(houseParameter);
+            }
             existingHouse.setHouseParameters(houseDto.getHouseParameters());
     
             // Update user list
