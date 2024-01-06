@@ -63,7 +63,7 @@ public class HouseServiceImpl implements HouseService{
                 //  existingUser.setEmail(user.getEmail());
                 //  existingUser.setUsername(user.getUsername());
                  existingUser.setAdmin(user.isAdmin());
-                 existingUser.setActive(true);
+                 existingUser.setIsActive(true);
                  existingUser.setHouseId(newHouse.getId());
                  userRepo.save(existingUser);
                  users.add(existingUser);
@@ -115,7 +115,7 @@ public class HouseServiceImpl implements HouseService{
                 Optional<User> optionalUser = userRepo.findById(user.getId());
                 optionalUser.ifPresent(existingUser -> {
                     existingUser.setAdmin(user.isAdmin());
-                    existingUser.setActive(user.isActive());
+                    existingUser.setIsActive(user.getIsActive());
                     userRepo.save(existingUser);
                     updatedUsers.add(existingUser);
                 });

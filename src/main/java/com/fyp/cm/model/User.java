@@ -24,6 +24,6 @@ public class User extends BaseEntity{
     @JsonProperty("isAdmin")
     private boolean isAdmin;
     @JsonProperty("isActive")
-    private boolean isActive;
+    private Boolean isActive;
     private String houseId;
 }
