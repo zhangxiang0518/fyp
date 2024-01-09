@@ -116,6 +116,7 @@ public class HouseServiceImpl implements HouseService{
                 optionalUser.ifPresent(existingUser -> {
                     existingUser.setAdmin(user.isAdmin());
                     existingUser.setIsActive(user.getIsActive());
+                    existingUser.setHouseId(id);
                     userRepo.save(existingUser);
                     updatedUsers.add(existingUser);
                 });
